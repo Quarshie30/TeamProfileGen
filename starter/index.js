@@ -1,15 +1,13 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const Manager = require("./lib/Manager.js");
+const Engineer = require("./lib/Engineer.js");
+const Intern = require("./lib/Intern.js");
+const render = require("./starter/src/page-template.js");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
-const render = require("./src/page-template.js");
-
 
 const team = [];
 
@@ -80,21 +78,75 @@ const internQuestions = [
         name: "school",
         message: "Enter the intern's school:",
     }
-];    function promptManager() {
-    return inquirer.default.prompt(managerQuestions);
+];
+
+function promptManager() {
+    return inquirer.prompt(managerQuestions);
 }
 
 function promptEngineer() {
-    return inquirer.default.prompt(engineerQuestions);
+    return inquirer.prompt(engineerQuestions);
 }
 
 function promptIntern() {
-    return inquirer.default.prompt(internQuestions);
+    return inquirer.prompt(internQuestions);
 }
 
+function addManager(data) {
+    const manager = new Manager(data.name, data.id, data.email, data.officeNumber);
+    team.push(manager);
+    console.log("Manager added successfully!");
+    menu();
+}
+
+function addEngineer(data) {
+    const engineer = new Engineer(data.name, data.id, data.email, data.github);
+    team.push(engineer);
+    console.log("Engineer added successfully!");
+    menu();
+}
+
+function addIntern(data) {
+    const intern = new Intern(data.name, data.id, data.email, data.school);
+    team.push(intern);
+    console.log("Intern added successfully!");
+    menu();
+}
+
+function renderTeam() {
+    const html = render(team);
+    fs.writeFile(outputPath, html, err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(`Team HTML generated successfully! Check ${outputPath}`);
+        }
+    });
+}
+
+function menu() {
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "option",
+            message: "What you like to do?",
+            choices: ["Add an Engineer", "Add an Intern", "Finish building the team"]
+        }
+    ]).then(answer => {
+        switch (answer.option) {
+            case "Add an Engineer":
+                promptEngineer().then(addEngineer);
+                break;
+            case "Add an Intern":
+                promptIntern().then(addIntern);
+                break;
+            case "Finish building the team":
+                renderTeam();
+                break;
+        }
+    });
+}
 
 console.log("Welcome to the Team Profile Generator!");
 
 promptManager().then(addManager);
-
-;
