@@ -58,3 +58,26 @@ const engineerQuestions = [
         message: "Enter the engineer's GitHub username:",
     }
 ];
+
+const internQuestions = [
+    {
+        type: "input",
+        name: "name",
+        message: "Enter the intern's name:",
+    },
+    {
+        type: "input",
+        name: "id",
+        message: "Enter the intern's employee ID:",
+    },
+    {
+        type: "input",
+        name: "email",
+        message: "Enter the intern's email:",
+    },
+    {
+        type: "input",
+        name: "school",
+        message: "Enter the intern's school:",
+    }
+];
