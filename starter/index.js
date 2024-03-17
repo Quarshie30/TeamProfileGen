@@ -80,4 +80,21 @@ const internQuestions = [
         name: "school",
         message: "Enter the intern's school:",
     }
-];
+];    function promptManager() {
+    return inquirer.default.prompt(managerQuestions);
+}
+
+function promptEngineer() {
+    return inquirer.default.prompt(engineerQuestions);
+}
+
+function promptIntern() {
+    return inquirer.default.prompt(internQuestions);
+}
+
+
+console.log("Welcome to the Team Profile Generator!");
+
+promptManager().then(addManager);
+
+;
